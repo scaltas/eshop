@@ -1,0 +1,18 @@
+version: '3.4'
+
+services:
+  basket-service:
+    image: ${DOCKER_REGISTRY-}basketservice
+    build:
+      context: .
+      dockerfile: Basket-Service/Dockerfile
+
+  catalog-service:
+    image: ${DOCKER_REGISTRY-}catalogservice
+    build:
+      context: .
+      dockerfile: Catalog-Service/Dockerfile
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+
