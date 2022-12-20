@@ -7,16 +7,17 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["Catalog-Service/Catalog-Service.csproj", "Catalog-Service/"]
-RUN dotnet restore "Catalog-Service/Catalog-Service.csproj"
+COPY ["services/Catalog/Catalog.API/Catalog.API.csproj", "services/Catalog/Catalog.API/"]
+COPY ["BuildingBlocks/EventBus/EventBus/EventBus.csproj", "BuildingBlocks/EventBus/EventBus/"]
+RUN dotnet restore "services/Catalog/Catalog.API/Catalog.API.csproj"
 COPY . .
-WORKDIR "/src/Catalog-Service"
-RUN dotnet build "Catalog-Service.csproj" -c Release -o /app/build
+WORKDIR "/src/services/Catalog/Catalog.API"
+RUN dotnet build "Catalog.API.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Catalog-Service.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Catalog.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Catalog-Service.dll"]
+ENTRYPOINT ["dotnet", "Catalog.API.dll"]
