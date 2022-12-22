@@ -1,22 +1,15 @@
 version: '3.4'
 
 services:
-
-
-  rabbitmq:
-    image: rabbitmq:3-management-alpine
-
+  catalog.api:
+    image: ${DOCKER_REGISTRY-}catalogapi
+    build:
+      context: .
+      dockerfile: services/Catalog/Catalog.API/Dockerfile
 
   basket.api:
     image: ${DOCKER_REGISTRY-}basketapi
     build:
       context: .
       dockerfile: services/Basket/Basket.API/Dockerfile
-
-
-  catalog.api:
-    image: ${DOCKER_REGISTRY-}catalogapi
-    build:
-      context: .
-      dockerfile: services/Catalog/Catalog.API/Dockerfile
 
